@@ -1,1 +1,1 @@
-![Imagen en Tinkercad sin display](ruta/a/imagen.png)
+![Imagen en Tinkercad sin display](./circuito-tinkercad-s-d.png)
