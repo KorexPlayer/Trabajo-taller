@@ -311,15 +311,15 @@ void ejecutarAnimacionDerrota(unsigned long tiempoActual) {
   display.displayOff();
   display.displayString("    ");
   display.displayOn();
-  char* str[] = "YOU LOSE"
-  while (tiempoActual - milis() > 4000) {
-  if (display.displayRunning(str)) {
+
+  while (tiempoActual - millis() > 4000) {
+  if (display.displayRunning("YOU LOSE")) {
     while (display.displayRunningShift()) delay(500);
   }
   delay(1000);
   actualizarDisplay();
   }
-  */
+
 
   //Ejecucion para arduino
   //Serial.println("Perdiste.");
@@ -327,7 +327,7 @@ void ejecutarAnimacionDerrota(unsigned long tiempoActual) {
   //delay(5000);
   estadoJuego = INICIO;
 }
-
+/*
 void ejecutarAnimacionInicio(){
   ///*
   //Ejecucion para ESP
@@ -342,11 +342,12 @@ void ejecutarAnimacionInicio(){
   delay(1000);
   actualizarDisplay();
   }
-  //*/
   //Ejecucion para arduino
   //Serial.println("Toca para empezar");
   delay(5000);
 }
+*/
+
 
 void cambiarColorLed(int r, int v, int a) {
   //Cambia el color del rgb, ya que este puede usar valores intermedios se usarian en formato analogo principalmente
