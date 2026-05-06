@@ -3,8 +3,6 @@
 
 //Pines a usar en ESP:
 
-/*
-
 // Display 7-segmentos
 const int PIN_DISP_DIO = 21;
 const int PIN_DISP_CLK = 22;
@@ -23,10 +21,8 @@ const int PIN_RGB_R = 19;
 const int PIN_RGB_G = 18;
 const int PIN_RGB_B = 5;
 
-*/
-
 //Pines a usar en Arduino:
-
+/*
 // Led de referencia y Boton
 const int PIN_LED_REF = 3;
 const int PIN_BOTON = 2;
@@ -40,6 +36,8 @@ const int PIN_SEM_G = 9;
 const int PIN_RGB_R = 4;
 const int PIN_RGB_G = 5;
 const int PIN_RGB_B = 6;
+*/
+
 
 //Estados de Juego y Semaforo
 enum EstadoDeJuego {
@@ -78,7 +76,7 @@ int multiplicador = 1; // 1 a 5
 bool botonPresionadoPreviamente = false;
 
 //Display de 7 segmentos
-//TM1650 display;
+TM1650 display;
 
 void setup() {
   //Iniciamos Serial
@@ -97,11 +95,10 @@ void setup() {
   pinMode(PIN_RGB_B, OUTPUT);
 
   //Para usar random requerimos de una semilla, para que sea aleatorio, tomaremos una lectura de un pin analogico para que el ruido nos de esa aleatoriedad.
-  randomSeed(analogRead(A0)); 
+  randomSeed(analogRead(36)); 
 
-  //Wire.begin();
-  //display.init();
-  iniciarJuego();
+  Wire.begin();
+  display.init();
 }
 
 void loop() {
@@ -236,9 +233,6 @@ void evaluarPulsacion() {
   }
   Serial.print("Multiplicador: ");
   Serial.println(multiplicador);
-  // ¿El semáforo está en ROJO? -> Evaluar si hay salvavidas o ir a DERROTA
-  // ¿El semáforo NO está en rojo? -> Acierto. Sumar puntos, subir Hz, reiniciar semáforo.
-  // ¿El semáforo está en VERDE? -> Subir nivel del multiplicador.
 }
 
 void reiniciarSecuenciaSemaforo() {
@@ -297,7 +291,7 @@ void actualizarLedRGB() {
 
 void actualizarDisplay() {
   // Mandar el valor de 'puntuacion' al módulo 7-segmentos
-  /*
+  ///
   //Ejecucion para ESP
   display.displayOff();
   display.displayString("    ");
@@ -305,31 +299,53 @@ void actualizarDisplay() {
   char str[30];
   char* line = itoa(puntuacion, str, 10);
   display.displayString(line);
-  */
+  //*/
   //Ejecucion para arduino
-  Serial.print("Puntuacion:");
-  Serial.println(puntuacion);
+  //Serial.print("Puntuacion:");
+  //Serial.println(puntuacion);
 }
 
 void ejecutarAnimacionDerrota(unsigned long tiempoActual) {
-  /*
+  ///*
   //Ejecucion para ESP
   display.displayOff();
   display.displayString("    ");
   display.displayOn();
   char* str[] = "YOU LOSE"
-  while (tiempoActual - milis() > 8000) {
-  display.displayString(str);
+  while (tiempoActual - milis() > 4000) {
+  if (display.displayRunning(str)) {
+    while (display.displayRunningShift()) delay(500);
+  }
   delay(1000);
   actualizarDisplay();
   }
   */
 
   //Ejecucion para arduino
-  Serial.println("Perdiste.");
-  Serial.println(puntuacion);
-  delay(7000);
+  //Serial.println("Perdiste.");
+  //Serial.println(puntuacion);
+  //delay(5000);
   estadoJuego = INICIO;
+}
+
+void ejecutarAnimacionInicio(){
+  ///*
+  //Ejecucion para ESP
+  display.displayOff();
+  display.displayString("    ");
+  display.displayOn();
+  char* str[] = "toca para empezar";
+  while (tiempoActual - milis() > 4000) {
+  if (display.displayRunning(str)) {
+    while (display.displayRunningShift()) delay(500);
+  }
+  delay(1000);
+  actualizarDisplay();
+  }
+  //*/
+  //Ejecucion para arduino
+  //Serial.println("Toca para empezar");
+  delay(5000);
 }
 
 void cambiarColorLed(int r, int v, int a) {
